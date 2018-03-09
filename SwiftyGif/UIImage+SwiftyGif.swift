@@ -189,7 +189,7 @@ public extension UIImage {
   
     func frameDelayTimes() -> [Float] {
         if let data = self.imageData {
-            guard let imageSource = CGImageSourceCreateWithData(data as CFData, nil) else { return nil }
+            guard let imageSource = CGImageSourceCreateWithData(data as CFData, nil) else { return [] }
           
             do {
                 return try self.delayTimes(imageSource)
