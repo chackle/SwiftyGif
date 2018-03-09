@@ -187,18 +187,17 @@ public extension UIImage {
         return frameDelays
     }
   
-    func frameRate() -> Float? {
+    func frameDelayTimes() -> [Float] {
         if let data = self.imageData {
             guard let imageSource = CGImageSourceCreateWithData(data as CFData, nil) else { return nil }
           
             do {
-                let delayTimes = try self.delayTimes(imageSource)
-                return delayTimes.first
+                return try self.delayTimes(imageSource)
             } catch {
               
             }
         }
-        return nil
+        return []
     }
     
     /**
