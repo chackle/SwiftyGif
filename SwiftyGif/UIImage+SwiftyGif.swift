@@ -186,6 +186,20 @@ public extension UIImage {
         }
         return frameDelays
     }
+  
+    func frameRate() -> Float? {
+        if let data = self.imageData {
+            guard let imageSource = CGImageSourceCreateWithData(data as CFData, nil) else { return nil }
+          
+            do {
+                let delayTimes = try self.delayTimes(imageSource)
+                return delayTimes.first
+            } catch {
+              
+            }
+        }
+        return nil
+    }
     
     /**
      Compute backing data for this gif
