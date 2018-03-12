@@ -32,8 +32,8 @@ let _delegateKey = malloc(4)
     @objc optional func gifDidStart(sender: UIImageView)
     @objc optional func gifDidLoop(sender: UIImageView)
     @objc optional func gifDidStop(sender: UIImageView)
-    @objc optional func gifURLDidFinish(sender: UIImageView)
-    @objc optional func gifURLDidFail(sender: UIImageView)
+    @objc optional func gifURLDidFinish(sender: UIImageView, withUrl url: URL)
+    @objc optional func gifURLDidFail(sender: UIImageView, withUrl url: URL)
 }
 
 public extension UIImageView {
@@ -130,9 +130,9 @@ public extension UIImageView {
                 loader.removeFromSuperview()
                 if let data = data {
                     self.setGifImage(UIImage.init(gifData: data), manager: manager, loopCount: loopCount)
-                    self.delegate?.gifURLDidFinish?(sender: self)
+                    self.delegate?.gifURLDidFinish?(sender: self, withUrl: url)
                 } else {
-                    self.delegate?.gifURLDidFail?(sender: self)
+                    self.delegate?.gifURLDidFail?(sender: self, withUrl: url)
                 }
             }
         }
