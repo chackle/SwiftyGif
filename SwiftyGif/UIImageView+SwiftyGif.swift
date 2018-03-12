@@ -125,19 +125,25 @@ public extension UIImageView {
                 views: ["subview": loader]))
             loader.startAnimating()
         }
-        
-        let task = URLSession.shared.dataTask(with: url) { (data, _ , _) in
+        var task: URLSessionDataTask?
+        let completionHandler = { (data: Data?, response: URLResponse?, error: Error?) in
             DispatchQueue.main.async {
                 loader.removeFromSuperview()
-                if let data = data {
-                    self.setGifImage(UIImage.init(gifData: data), manager: manager, loopCount: loopCount)
-                    self.delegate?.gifURLDidFinish?(sender: self, withTask: task)
-                } else {
-                    self.delegate?.gifURLDidFail?(sender: self, withTask: task)
+                if let task = task {
+                    if let data = data {
+                        self.setGifImage(UIImage.init(gifData: data), manager: manager, loopCount: loopCount)
+                        self.delegate?.gifURLDidFinish?(sender: self, withTask: task)
+                    } else {
+                        self.delegate?.gifURLDidFail?(sender: self, withTask: task)
+                    }
                 }
             }
         }
-        task.resume()
+        task = URLSession.shared.dataTask(with: url, completionHandler: completionHandler)
+        task?.resume()
+        if let task = task {
+            self.delegate?.gifURLDidStart?(sender: self, withTask: task)
+        }
     }
 
     // MARK: Logic
