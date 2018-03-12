@@ -32,9 +32,9 @@ let _delegateKey = malloc(4)
     @objc optional func gifDidStart(sender: UIImageView)
     @objc optional func gifDidLoop(sender: UIImageView)
     @objc optional func gifDidStop(sender: UIImageView)
-    @objc optional func gifURLDidStart(sender: UIImageView, withTask task: URLSessionDataTask)
-    @objc optional func gifURLDidFinish(sender: UIImageView, withTask task: URLSessionDataTask)
-    @objc optional func gifURLDidFail(sender: UIImageView, withTask task: URLSessionDataTask)
+    @objc optional func gifURLDidStart(sender: UIImageView, withUrl url: URL, andTask task: URLSessionDataTask)
+    @objc optional func gifURLDidFinish(sender: UIImageView, withUrl url: URL, andTask task: URLSessionDataTask)
+    @objc optional func gifURLDidFail(sender: UIImageView, withUrl url: URL, andTask task: URLSessionDataTask)
 }
 
 public extension UIImageView {
@@ -132,9 +132,9 @@ public extension UIImageView {
                 if let task = task {
                     if let data = data {
                         self.setGifImage(UIImage.init(gifData: data), manager: manager, loopCount: loopCount)
-                        self.delegate?.gifURLDidFinish?(sender: self, withTask: task)
+                        self.delegate?.gifURLDidFinish?(sender: self, withUrl: url, andTask: task)
                     } else {
-                        self.delegate?.gifURLDidFail?(sender: self, withTask: task)
+                        self.delegate?.gifURLDidFail?(sender: self, withUrl: url, andTask: task)
                     }
                 }
             }
@@ -142,7 +142,7 @@ public extension UIImageView {
         task = URLSession.shared.dataTask(with: url, completionHandler: completionHandler)
         task?.resume()
         if let task = task {
-            self.delegate?.gifURLDidStart?(sender: self, withTask: task)
+            self.delegate?.gifURLDidStart?(sender: self, withUrl: url, andTask: task)
         }
     }
 
